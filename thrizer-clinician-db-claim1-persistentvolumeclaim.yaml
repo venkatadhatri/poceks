@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  creationTimestamp: null
+  labels:
+    io.kompose.service: thrizer-clinician-db-claim1
+  name: thrizer-clinician-db-claim1
+spec:
+  storageClassName: region1storageclassforapi
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
+status: {}

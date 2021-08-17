@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yaml
+    kompose.version: 1.22.0 (955b78124)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: thrizer-api
+  name: thrizer-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: thrizer-api
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert -f docker-compose.yaml
+        kompose.version: 1.22.0 (955b78124)
+      creationTimestamp: null
+      labels:
+        io.kompose.network/reverse-proxy: "true"
+        io.kompose.service: thrizer-api
+    spec:
+      containers:
+        - env:
+            - name: DB_DATABASE
+              value: admin
+            - name: DB_HOST
+              value: thrizer-clinician-db
+            - name: DB_NAME
+              value: test
+            - name: DB_PASSWORD
+              value: admin
+            - name: DB_USER
+              value: admin
+            - name: HOST
+              value: 0.0.0.0
+            - name: LETSENCRYPT_EMAIL
+              value: build@labshare.org
+            - name: LETSENCRYPT_HOST
+              value: thrizer-clinician-api.test.aws.labshare.org
+            - name: SERVICE_PATH
+              value: /
+            - name: TZ
+              value: America/New_York
+            - name: UPSTREAM
+              value: thrizer-clinician-api.test.aws.labshare.org
+            - name: VIRTUAL_HOST
+              value: thrizer-clinician-api.test.aws.labshare.org
+            - name: VIRTUAL_PORT
+              value: "3000"
+          image: 'labshare/thrizer_clinician_api:39ae1f0690cfc6312043c8391523276453f7ab43'
+          name: thrizer-api
+          ports:
+            - containerPort: 3000
+          resources: {}
+      imagePullSecrets:
+        - name: regcred
+      restartPolicy: Always
+      hostname: 'thrizer-clinician-api'
+      restartPolicy: Always
+status: {}
